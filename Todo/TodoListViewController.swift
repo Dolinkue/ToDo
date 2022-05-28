@@ -10,10 +10,15 @@ import UIKit
 class TodoListViewController: UITableViewController {
 
     
-    var itemArray = ["milk","chocolate", "huevos" ]
+    var itemArray = [DataModel]()
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
+        
         
     }
     
@@ -27,7 +32,9 @@ class TodoListViewController: UITableViewController {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoItemCell", for: indexPath)
         
-        cell.textLabel?.text = itemArray[indexPath.row]
+        cell.textLabel?.text = itemArray[indexPath.row].title
+        
+        cell.accessoryType = itemArray[indexPath.row].done == true ? .checkmark : .none
         
         return cell
     }
@@ -40,12 +47,14 @@ class TodoListViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        if tableView.cellForRow(at: indexPath)?.accessoryType == .checkmark {
-            tableView.cellForRow(at: indexPath)?.accessoryType = .none
-        } else {
-            tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
-        }
+        
+
+            
+        itemArray[indexPath.row].done = !itemArray[indexPath.row].done
+            
+         
  
+        tableView.reloadData()
         
         tableView.deselectRow(at: indexPath, animated: true)
         
@@ -61,7 +70,11 @@ class TodoListViewController: UITableViewController {
         let alert = UIAlertController(title: "Add new items", message: "", preferredStyle: .alert)
         
         let action = UIAlertAction(title: "Add Item", style: .default) { action in
-            self.itemArray.append(texField.text!)
+            
+            var newItem = DataModel()
+            newItem.title = texField.text ?? ""
+            
+            self.itemArray.append(newItem)
             self.tableView.reloadData()
         }
         
