@@ -6,12 +6,13 @@
 //
 
 import UIKit
+import CoreData
 
 class TodoListViewController: UITableViewController {
 
     
-    var itemArray = [DataModel]()
-    
+    var itemArray = [Item2]()
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     
     override func viewDidLoad() {
@@ -71,11 +72,17 @@ class TodoListViewController: UITableViewController {
         
         let action = UIAlertAction(title: "Add Item", style: .default) { action in
             
-            var newItem = DataModel()
-            newItem.title = texField.text ?? ""
+            // let context es para acceder al context del appdelegate
+         //   let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+            let newItem = Item2(context: self.context)
+            newItem.title = texField.text!
+            newItem.done = false
             
             self.itemArray.append(newItem)
-            self.tableView.reloadData()
+            
+            self.saveItem()
+            
+            
         }
         
         alert.addTextField { alertText in
@@ -86,6 +93,17 @@ class TodoListViewController: UITableViewController {
         alert.addAction(action)
             
         present(alert, animated: true, completion: nil)
+        
+    }
+    
+    func saveItem() {
+        do {
+           try context.save()
+        } catch {
+            print("error saving \(error.localizedDescription)")
+        }
+        
+        self.tableView.reloadData()
         
     }
     
