@@ -18,7 +18,7 @@ class TodoListViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
+        loadItem()
         
         
     }
@@ -49,13 +49,14 @@ class TodoListViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         
+//        context.delete(itemArray[indexPath.row])
+//        itemArray.remove(at: indexPath.row)
 
             
         itemArray[indexPath.row].done = !itemArray[indexPath.row].done
+        
+        saveItem()
             
-         
- 
-        tableView.reloadData()
         
         tableView.deselectRow(at: indexPath, animated: true)
         
@@ -104,6 +105,17 @@ class TodoListViewController: UITableViewController {
         }
         
         self.tableView.reloadData()
+        
+    }
+    
+    func loadItem() {
+        let request : NSFetchRequest<Item2> = Item2.fetchRequest()
+        do {
+           itemArray =  try context.fetch(request)
+        } catch {
+            print("error saving \(error.localizedDescription)")
+        }
+        
         
     }
     
