@@ -18,6 +18,7 @@ class TodoListViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
         loadItem()
         
         
@@ -108,17 +109,41 @@ class TodoListViewController: UITableViewController {
         
     }
     
-    func loadItem() {
-        let request : NSFetchRequest<Item2> = Item2.fetchRequest()
+    func loadItem(with request: NSFetchRequest<Item2> = Item2.fetchRequest()) {
+        
+      
         do {
            itemArray =  try context.fetch(request)
         } catch {
             print("error saving \(error.localizedDescription)")
         }
         
-        
     }
     
 }
 
+
+// MARK: SearchBar
+
+
+extension TodoListViewController: UISearchBarDelegate {
+    
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        
+        let request : NSFetchRequest<Item2> = Item2.fetchRequest()
+        
+        let predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
+        
+        request.predicate = predicate
+        
+        let sortDescriptr = NSSortDescriptor(key: "title", ascending: true)
+        
+        request.sortDescriptors = [sortDescriptr]
+        
+       loadItem(with: request)
+        
+    }
+    
+}
 
