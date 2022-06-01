@@ -18,6 +18,8 @@ class CategoryTableViewController: UITableViewController {
         super.viewDidLoad()
      
         loadCategory()
+        
+        tableView.rowHeight = 80.0
       
     }
 
@@ -137,7 +139,7 @@ extension CategoryTableViewController: SwipeTableViewCellDelegate {
         }
 
         // customize the action appearance
-        deleteAction.image = UIImage(systemName: "trash")
+        deleteAction.image = UIImage(systemName: "trash.fill")
 
         return [deleteAction]
     }

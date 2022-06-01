@@ -28,6 +28,8 @@ class TodoListViewController: UITableViewController {
         super.viewDidLoad()
         
         
+        tableView.rowHeight = 80.0
+        self.title = selectedCategory?.name
         
         
         
