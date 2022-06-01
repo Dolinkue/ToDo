@@ -132,6 +132,8 @@ extension CategoryTableViewController: SwipeTableViewCellDelegate {
             // handle action by updating model with deletion
             self.context.delete(self.categoryArray[indexPath.row])
             self.categoryArray.remove(at: indexPath.row)
+            self.saveCategory()
+            
         }
 
         // customize the action appearance
