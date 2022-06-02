@@ -12,6 +12,8 @@ import SwipeCellKit
 class CategoryTableViewController: UITableViewController {
     
     var categoryArray = [Category]()
+    
+    // let context es para acceder al context del appdelegate
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
 
     override func viewDidLoad() {
@@ -20,6 +22,8 @@ class CategoryTableViewController: UITableViewController {
         loadCategory()
         
         tableView.rowHeight = 80.0
+        
+       
       
     }
 
@@ -34,8 +38,8 @@ class CategoryTableViewController: UITableViewController {
         
         let action = UIAlertAction(title: "Add Item", style: .default) { action in
             
-            // let context es para acceder al context del appdelegate
-         //   let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+ 
+       
             let newItem = Category(context: self.context)
             newItem.name = texField.text!
           
@@ -134,7 +138,12 @@ extension CategoryTableViewController: SwipeTableViewCellDelegate {
             // handle action by updating model with deletion
             self.context.delete(self.categoryArray[indexPath.row])
             self.categoryArray.remove(at: indexPath.row)
-            self.saveCategory()
+            do {
+                try self.context.save()
+            } catch {
+                print("error saving \(error.localizedDescription)")
+            }
+            
             
         }
 
@@ -143,6 +152,13 @@ extension CategoryTableViewController: SwipeTableViewCellDelegate {
 
         return [deleteAction]
     }
+    
+    func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeOptions {
+        var options = SwipeOptions()
+        options.expansionStyle = .destructive
+        return options
+    }
+
     
     
 }
